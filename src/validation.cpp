@@ -4850,7 +4850,7 @@ bool CheckProofOfFullNode(const CBlock& block, CValidationState& state, const CB
     if (!block.fProofOfFullNode && block.hashPoFN.IsNull()) {
         if (block.IsProofOfStake() && block.vtx[1]->HasBlindedValues())
             return state.DoS(100, error("%s: coinstake with blinded values is missing proof of full node", __func__),
-                             REJECT_INVALID, "bad-fullnode-hash", /*corruptionIn=*/true);
+                             REJECT_INVALID, "bad-cs-txout", /*corruptionIn=*/true);
 
         // No claim and no proof-dependent payout, nothing to check.
         return true;

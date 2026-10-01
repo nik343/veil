@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(garbled_proof_on_a_real_chain_is_a_possible_corruption)
     strippedBlinded.hashPoFN = uint256();
     CValidationState stateStrippedBlinded;
     BOOST_CHECK(!CheckProofOfFullNode(strippedBlinded, stateStrippedBlinded, pindexTip));
-    BOOST_CHECK_EQUAL(stateStrippedBlinded.GetRejectReason(), "bad-fullnode-hash");
+    BOOST_CHECK_EQUAL(stateStrippedBlinded.GetRejectReason(), "bad-cs-txout");
     BOOST_CHECK(stateStrippedBlinded.CorruptionPossible());
     BOOST_CHECK_EQUAL(DoSScore(stateStrippedBlinded), 100);
     BOOST_CHECK(strippedBlinded.GetHash() == blinded.GetHash());
