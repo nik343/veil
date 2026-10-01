@@ -4383,10 +4383,6 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
         return false;
     }
 
-    // Check the block signature if it is a proof of stake block
-    if (block.IsProofOfStake() && !veil::ValidateBlockSignature(block))
-        return state.DoS(100, false, REJECT_INVALID, "bad-block-sig", true, "PoS block signature not valid");
-
     // Check the merkle root.
     if (fCheckMerkleRoot) {
         // Before the PoW update the body fields themselves sit outside the header hash and are only
@@ -4416,6 +4412,10 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
     // one. Check the body commitments first so a mutated copy cannot permanently fail the hash.
     if (block.nTime >= nPowTimeStampActive && block.IsProofOfStake() != block.IsProofOfStakeHeader())
         return state.DoS(100, false, REJECT_INVALID, "bad-pos-version", false, "header version and block content disagree on proof of stake");
+
+    // Check the block signature only after the committed body and its type agree with the header.
+    if (block.IsProofOfStake() && !veil::ValidateBlockSignature(block))
+        return state.DoS(100, false, REJECT_INVALID, "bad-block-sig", true, "PoS block signature not valid");
 
     // All potential-corruption validation must be done before we do any
     // transaction validation, as otherwise we may mark the header as invalid

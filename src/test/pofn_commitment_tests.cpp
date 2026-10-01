@@ -139,6 +139,7 @@ BOOST_AUTO_TEST_CASE(header_conflict_is_a_possible_corruption)
 {
     CBlock block = MakeStakeBlock();
     block.vtx.pop_back();
+    block.nVersion |= CBlockHeader::PROGPOW_BLOCK;
     block.fProofOfStake = 0;
     block.fProofOfFullNode = 1;
 
